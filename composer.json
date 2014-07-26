@@ -1,0 +1,40 @@
+{
+    "name": "rayamedia/typopages",
+    "description": "Provides a base CMS functionality. Helps to create html pages and blocks.",
+    "keywords": [
+        "zf2 module",
+        "yima module",
+        "raya media",
+        "CMS",
+        "content management",
+        "pages"
+    ],
+    "authors": [
+        {
+            "name": "Payam Naderi",
+            "email": "naderi.payam@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3"
+    },
+    "require-dev":
+    {
+        "rayamedia/yima-adminor": "dev-master"
+    },
+    "minimum-stability": "dev",
+    "autoload" : {
+        "psr-0" : {
+            "typoPages\\" : "src/"
+        },
+        "classmap" : [
+            "./Module.php"
+        ]
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "http://packages.raya-media.com/"
+        }
+    ]
+}

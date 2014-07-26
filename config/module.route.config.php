@@ -13,6 +13,9 @@ return array(
             ),
             'may_terminate' => false,
             'child_routes' => array(
+                // note: We have to use custom route as child because
+                //       on router factory typoPagesRouter must exists in plugin manager
+                //       that with ZF default behave it's not possible.
                 'default' => array(
                     'type'    => 'typoPagesRouter',
                     'options' => array(

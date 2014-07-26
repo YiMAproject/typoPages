@@ -42,6 +42,11 @@ class HttpTypoPagesRouter implements RouteInterface
     protected $params;
 
     /**
+     * @var array
+     */
+    protected $assembledParams;
+
+    /**
      * Construct
      *
      * @param $route
@@ -60,7 +65,6 @@ class HttpTypoPagesRouter implements RouteInterface
                     'controller' => 'Index',
                     ...
                 ),
-                'cryption' => '\yimaAdminor\Mvc\Router\Http\Crypto\CryptionBase64'
             ),
         ),
         */
@@ -68,18 +72,6 @@ class HttpTypoPagesRouter implements RouteInterface
         // default options of route, exp. [controller] => 'Index'
         $this->defaults = $options['defaults'];
         unset($options['defaults']);
-
-        // route options
-        $options = (!is_array($options)) ? array() : $options;
-        if (isset($options['cryption'])) {
-            // set crypto from router config
-            $cryption = $options['cryption'];
-            $cryption = (is_string($cryption))
-                ? (class_exists($cryption)) ? new $cryption() : $cryption
-                : $cryption;
-
-            unset($options['cryption']);
-        }
 
         $this->params  = $options;
     }
@@ -127,8 +119,7 @@ class HttpTypoPagesRouter implements RouteInterface
         if (!method_exists($request, 'getQuery') && !method_exists($request, 'getUri')) {
             return false;
         }
-        
-        // determine that we have on correct route matching
+
         /** @var $uri \Zend\Uri\Http */
         /** @var $request \Zend\Http\PhpEnvironment\Request */
         $uri  = $request->getUri();
@@ -137,14 +128,15 @@ class HttpTypoPagesRouter implements RouteInterface
         if ($pathOffset !== null) {
         	if ($pathOffset >= 0 && strlen($path) >= $pathOffset) {
         		if ($this->route !== substr($path, $pathOffset)) {
-                    // we are not in admin child routes
-        			return null;
+                    // we are not in defined routes stack (/) | (/content)
+        			return false;
         		}
         	}
         }
 
+        d_e($path);
+
         # get route params
-        // get request query string (?qD2D32#es...EncODed | ?module=Application&encoded=none)
         $reqUri      = $request->getRequestUri();
         if (($qstack = strpos($reqUri, '?')) === false) {
             // we dont have any parameter to match

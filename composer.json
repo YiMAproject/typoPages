@@ -22,6 +22,8 @@
     {
         "rayamedia/yima-adminor": "dev-master",
         "rayamedia/yima-widgetator": "dev-master",
+        "rayamedia/yima-localize": "dev-master",
+        "rayamedia/yima-base": "dev-master",
         "poirot/data-entity": "dev-master"
     },
     "minimum-stability": "dev",

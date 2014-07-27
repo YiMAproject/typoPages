@@ -19,6 +19,13 @@ class PageModel implements PageInterface
      */
     public function getPageByIdentity($identity)
     {
-        return new PageEntity();
+        if ($identity != '/news/new_world_order') {
+            return false;
+        }
+
+        return new PageEntity(array(
+            'identity' => $identity,
+            'type'     => 'simple',
+        ));
     }
 }

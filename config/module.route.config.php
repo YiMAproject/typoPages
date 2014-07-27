@@ -6,6 +6,10 @@ return array(
             'options' => array(
                 'route'    => '/',
                 'suffix'   => 'html',
+                'defaults' => array(
+                    'controller' => 'typoPages\Controller\IndexController',
+                    'action'     => 'index',
+                ),
             ),
             'may_terminate' => false,
         ),

@@ -1,7 +1,7 @@
 <?php
 namespace typoPages\Model\Interfaces;
 
-use typoPages\Model\Entity\PageEntity;
+use typoPages\Model\PageEntity;
 
 /**
  * Interface PagesInterface

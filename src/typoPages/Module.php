@@ -1,12 +1,9 @@
 <?php
 namespace typoPages;
 
-use Zend\EventManager\EventInterface;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
-use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
-use Zend\Mvc\MvcEvent;
-use Zend\Mvc\Router\SimpleRouteStack as HttpSimpleRouteStack;
+use Zend\ModuleManager\Feature\ServiceProviderInterface;
 
 /**
  * Class Module
@@ -14,9 +11,25 @@ use Zend\Mvc\Router\SimpleRouteStack as HttpSimpleRouteStack;
  * @package typoPages
  */
 class Module implements
+    ServiceProviderInterface,
     ConfigProviderInterface,
     AutoloaderProviderInterface
 {
+    /**
+     * Expected to return \Zend\ServiceManager\Config object or array to
+     * seed such an object.
+     *
+     * @return array|\Zend\ServiceManager\Config
+     */
+    public function getServiceConfig()
+    {
+        return array(
+            'invokables' => array(
+                'typoPages.Model.Page' => 'typoPages\Model\PageModel',
+            ),
+        );
+    }
+
     /**
      * Returns configuration to merge with application configuration
      *

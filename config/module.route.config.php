@@ -4,7 +4,8 @@ return array(
         __NAMESPACE__ => array(
             'type'    => 'typoPages\Mvc\Router\HttpTypoPagesRouter', // use class exists
             'options' => array(
-                'route'    => '/c',
+                'route'    => '/',
+                'suffix'   => 'html',
             ),
             'may_terminate' => false,
         ),

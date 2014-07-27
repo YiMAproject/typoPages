@@ -20,7 +20,8 @@
     },
     "require-dev":
     {
-        "rayamedia/yima-adminor": "dev-master"
+        "rayamedia/yima-adminor": "dev-master",
+        "poirot/data-entity": "dev-master"
     },
     "minimum-stability": "dev",
     "autoload" : {

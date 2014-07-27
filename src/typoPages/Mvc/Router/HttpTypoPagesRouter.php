@@ -2,6 +2,9 @@
 namespace typoPages\Mvc\Router;
 
 use Traversable;
+use typoPages\Model\Interfaces\PageInterface;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Stdlib\ArrayUtils;
 use Zend\Stdlib\RequestInterface as Request;
 use Zend\Mvc\Router\Http\RouteInterface;
@@ -12,7 +15,9 @@ use Zend\Mvc\Router\Http\RouteMatch;
  *
  * @package typoPages\Mvc\Router
  */
-class HttpTypoPagesRouter implements RouteInterface
+class HttpTypoPagesRouter implements
+    RouteInterface,
+    ServiceLocatorAwareInterface
 {
     /**
      * @var int Maximum Priority for Admin Detection Route
@@ -47,6 +52,16 @@ class HttpTypoPagesRouter implements RouteInterface
     protected $assembledParams;
 
     /**
+     * @var string Pages Suffix
+     */
+    protected $suffix;
+
+    /**
+     * @var ServiceLocatorInterface
+     */
+    protected $serviceLocator;
+
+    /**
      * Construct
      *
      * @param $route
@@ -69,11 +84,31 @@ class HttpTypoPagesRouter implements RouteInterface
         ),
         */
 
+        // run setter methods
+        foreach($options as $option => $value) {
+            $method = 'set'.str_replace(' ', '', ucwords(strtolower(str_replace('_', ' ', $option))));
+            if (method_exists($this, $method)) {
+                $this->{$method}($value);
+                unset($options[$option]);
+            }
+        }
+
         // default options of route, exp. [controller] => 'Index'
         $this->defaults = $options['defaults'];
         unset($options['defaults']);
 
         $this->params  = $options;
+    }
+
+    /**
+     * Set Pages Suffix
+     * - http://....../pages.suffix
+     *
+     * @param $suffix
+     */
+    protected function setSuffix($suffix)
+    {
+        $this->suffix = (string) $suffix;
     }
 
     /**
@@ -123,36 +158,39 @@ class HttpTypoPagesRouter implements RouteInterface
         /** @var $uri \Zend\Uri\Http */
         /** @var $request \Zend\Http\PhpEnvironment\Request */
         $uri  = $request->getUri();
-        $path = $uri->getPath();
+        $path = substr($uri->getPath(), $pathOffset);
 
-        if ($pathOffset !== null) {
-        	if ($pathOffset >= 0 && strlen($path) >= $pathOffset) {
-        		if ($this->route !== substr($path, $pathOffset)) {
-                    // we are not in defined routes stack (/) | (/content)
-        			return false;
-        		}
-        	}
+        $pageIdentity = $path;
+        if (substr($path, -strlen($this->suffix)) === $this->suffix) {
+            // we have a uri that end with suffix
+            $pageIdentity = substr($path, 0, strlen($path)-(strlen($this->suffix)+1/* 1for. */));
         }
 
-        d_e($path);
+        // get page by url ... {
+        $sm = $this->getServiceManager();
+        $pagesModel = $sm->get('typoPages.Model.Page');
+        if (! $pagesModel instanceof PageInterface) {
+            throw new \Exception(
+                sprintf(
+                    'Pages Model must instanceof PagesInterface but "%s" given.'
+                    , is_object($pagesModel) ? get_class($pagesModel) : gettype($pagesModel)
+                )
+            );
+        }
 
-        # get route params
-        $reqUri      = $request->getRequestUri();
-        if (($qstack = strpos($reqUri, '?')) === false) {
-            // we dont have any parameter to match
+        $page = $pagesModel->getPageByIdentity($pageIdentity);
+        if (!$page) {
             return false;
         }
+        // ... }
 
-        $queryString = substr($reqUri, $qstack+1);
 
-        $routeParams = array();
-        parse_str($queryString, $routeParams);
+        d_e('here');
 
         /*
          * Route default factory options 
          */
-        $params = array_merge($this->defaults, array()/*$this->params*/); // we don't want options as default values
-        $params = array_merge($params, $routeParams);
+        $params = array_merge($this->defaults, $this->params);
 
        	return new RouteMatch($params, strlen($this->route));
     }
@@ -182,5 +220,35 @@ class HttpTypoPagesRouter implements RouteInterface
     public function getAssembledParams()
     {
         return $this->assembledParams;
+    }
+
+    /**
+     * Get Service Manager
+     *
+     * @return \Zend\ServiceManager\ServiceManager
+     */
+    public function getServiceManager()
+    {
+        return $this->getServiceLocator()->getServiceLocator();
+    }
+
+    /**
+     * Set service locator
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     */
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
+    {
+        $this->serviceLocator = $serviceLocator;
+    }
+
+    /**
+     * Get service locator
+     *
+     * @return ServiceLocatorInterface
+     */
+    public function getServiceLocator()
+    {
+        return $this->serviceLocator;
     }
 }

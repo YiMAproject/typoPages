@@ -21,6 +21,7 @@
     "require-dev":
     {
         "rayamedia/yima-adminor": "dev-master",
+        "rayamedia/yima-widgetator": "dev-master",
         "poirot/data-entity": "dev-master"
     },
     "minimum-stability": "dev",

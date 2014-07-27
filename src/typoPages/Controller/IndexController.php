@@ -15,6 +15,15 @@ class IndexController extends AbstractActionController
         // We always has a page because of route detection
         $page = $this->params()->fromRoute('page');
 
-        d_e($page);
+        // Create page widget instance by pageEntity
+        $sm = $this->getServiceLocator();
+        $pageFactory = $sm->get('typoPages.Page.Factory');
+        $pageWidget  = $pageFactory->factory($page);
+
+        $content = $pageWidget->render();
+
+        return array(
+            'content' => $content
+        );
     }
 }

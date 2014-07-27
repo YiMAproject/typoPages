@@ -25,7 +25,8 @@ class Module implements
     {
         return array(
             'invokables' => array(
-                'typoPages.Model.Page' => 'typoPages\Model\PageModel',
+                'typoPages.Model.Page'   => 'typoPages\Model\PageModel',
+                'typoPages.Page.Factory' => 'typoPages\Service\PageFactory',
             ),
         );
     }

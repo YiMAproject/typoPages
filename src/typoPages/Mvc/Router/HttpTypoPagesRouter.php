@@ -184,15 +184,14 @@ class HttpTypoPagesRouter implements
         }
         // ... }
 
-
-        d_e('here');
+        $this->params['page'] = $page;
 
         /*
          * Route default factory options 
          */
         $params = array_merge($this->defaults, $this->params);
 
-       	return new RouteMatch($params, strlen($this->route));
+       	return new RouteMatch($params, strlen($path));
     }
 
     /**

@@ -10,7 +10,7 @@ use yimaLocali\LocaleAwareInterface;
  *
  * @package typoPages\Model\Entity
  */
-class PageModel extends PageTable implements
+class PageModel implements
     PageInterface,
     LocaleAwareInterface
 {
@@ -20,22 +20,35 @@ class PageModel extends PageTable implements
     protected $language;
 
     /**
-     * Get Page Object By Identity
+     * @var PageTable DataBase Table Gateway
+     */
+    protected $tableGateway;
+
+    /**
+     * Construct
+     */
+    public function __construct()
+    {
+        $this->tableGateway = new PageTable();
+    }
+
+    /**
+     * Get a Page By Url
      *
-     * @param $identity
+     * @param $url
      *
      * @return PageEntity
      */
-    public function getPageByIdentity($identity)
+    public function getPageByUrl($url)
     {
-        if ($identity != '/news/new_world_order') {
-            return false;
+        $result = $this->tableGateway->select(array('url' => $url));
+        if ($result->count()) {
+            $r = $result->current();
+
+            return $r;
         }
 
-        return new PageEntity(array(
-            'identity' => $identity,
-            'type'     => 'simple',
-        ));
+        return false;
     }
 
     /**

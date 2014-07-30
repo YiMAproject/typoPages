@@ -10,20 +10,23 @@ namespace typoPages\Model;
 class PageEntity extends \Poirot\Dataset\Entity
 {
     protected $properties = array(
-        'identity'    => null, /* Page Identity */
+        'page_id'     => null, /* Page Identity */
+        'url'         => null, /* Page Url*/
         'type'        => null, /* Page Type */
         'parent_page' => null, /* Parent Page */
     );
 
+    /**
+     * We want to add costume fields runtime for pages
+     *
+     * @var bool Strict Mode
+     */
     protected $strictMode = false;
 
-    /**
-     * Proxy Url to Identity
-     *
-     * @return string
-     */
-    public function getUrl()
+    public function exchangeArray($data)
     {
-        return $this->identity;
+        $this->setProperties($data);
+
+        return $this;
     }
 }

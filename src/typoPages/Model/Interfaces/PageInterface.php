@@ -28,11 +28,11 @@ interface PageInterface
     public function getLocale();
 
     /**
-     * Get Page Object By Identity
+     * Get Page Object By Url
      *
-     * @param $identity
+     * @param $url
      *
      * @return PageEntity
      */
-    public function getPageByIdentity($identity);
+    public function getPageByUrl($url);
 }

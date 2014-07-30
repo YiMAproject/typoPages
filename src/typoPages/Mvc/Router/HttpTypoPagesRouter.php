@@ -178,7 +178,7 @@ class HttpTypoPagesRouter implements
             );
         }
 
-        $page = $pagesModel->getPageByIdentity($pageIdentity);
+        $page = $pagesModel->getPageByUrl($pageIdentity);
         if (!$page) {
             return false;
         }

@@ -2,6 +2,7 @@
 namespace typoPages\Service;
 
 use typoPages\Model\PageEntity;
+use typoPages\Pages\PageAbstract;
 use yimaWidgetator\Service\WidgetManager;
 use yimaWidgetator\Widget\WidgetInterface;
 use Zend\ServiceManager\AbstractPluginManager;
@@ -37,11 +38,25 @@ class PageFactory implements ServiceLocatorAwareInterface
         $page->prepare();
 
         $options = $page->getArrayCopy();
-
-        $widget = $options['type'];
+        $widgetName = $options['type'];
         unset($options['type']);
 
-        return $this->getWidgetManager()->get($widget, $options);
+        $instance = $this->getPageInstance($widgetName);
+        $instance->setFromArray($options);
+
+        return $instance;
+    }
+
+    /**
+     * Get Class Page Instance By Name
+     *
+     * @param string $name PageName
+     *
+     * @return PageAbstract
+     */
+    public function getPageInstance($name)
+    {
+        return $this->getWidgetManager()->get($name);
     }
 
     /**

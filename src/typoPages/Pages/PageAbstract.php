@@ -8,7 +8,7 @@ use yimaWidgetator\Widget\AbstractWidget;
  *
  * @package typoPages\Pages
  */
-abstract class PagesAbstract extends AbstractWidget
+abstract class PageAbstract extends AbstractWidget
 {
 
 }

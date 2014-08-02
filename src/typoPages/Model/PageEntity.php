@@ -24,16 +24,9 @@ class PageEntity extends \Poirot\Dataset\Entity
     protected $strictMode = false;
 
     /**
-     * Implement Entity as ResultSet
+     * Prepare page for output render (pageFactory)
      *
-     * @param array $data Data
-     *
-     * @return $this
+     * return $this
      */
-    public function exchangeArray($data)
-    {
-        $this->setProperties($data);
-
-        return $this;
-    }
+    public function prepare(){ }
 }

@@ -34,6 +34,8 @@ class PageFactory implements ServiceLocatorAwareInterface
      */
     public function factory(PageEntity $page)
     {
+        $page->prepare();
+
         $options = $page->getArrayCopy();
 
         $widget = $options['type'];

@@ -17,9 +17,9 @@ class IndexController extends AbstractActionController
 
         /** @var $page PageEntity */
         $page = $this->params()->fromRoute('page');
-        // used by "load.ondemand.columns" filter to load extra columns,
-        // @see PageTable::getPreparePageEntity
-        $page->loadExtraColumnsByFilter = true;
+        if (! $page instanceof PageEntity) {
+            throw new \Exception('Invalid Page');
+        }
 
         // Create page widget instance by pageEntity
         $sm = $this->getServiceLocator();

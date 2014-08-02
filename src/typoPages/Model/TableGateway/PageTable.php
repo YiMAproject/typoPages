@@ -32,7 +32,7 @@ class PageTable extends AbstractTableGateway
             $this->resultSetPrototype = new ResultSet;
         }
 
-        // add PageEntity as Row Prototype
+        // add PageEntity as Row Result Prototype
         $this->resultSetPrototype
            ->setArrayObjectPrototype(
                 $this->getPreparePageEntity()
@@ -63,8 +63,9 @@ class PageTable extends AbstractTableGateway
                             return;
                         }
 
-                        // load page with dms and translatable features
 
+                        // load page with dms and translatable features
+                        $defaultFeatureSet = clone $self->featureSet;
                         /*$feature = new TranslatableFeature(array('title','description','note'));
                         $self->featureSet->addFeature($feature);*/
                         // put this on last, reason is on pre(Action) manupulate columns rawdataSet
@@ -78,9 +79,12 @@ class PageTable extends AbstractTableGateway
                         $loadEntt = $self->select(array($pkClmn => $pageID));
                         $loadEntt = $loadEntt->current();
 
+                        // restore default featureSet
+                        $self->featureSet = $defaultFeatureSet;
+
                         // Exchange new data to Entity
                         $reEntity = $fo->getProperty('entity')
-                            ->setProperties($loadEntt->getArrayCopy());
+                            ->merge($loadEntt->getArrayCopy());
                         $reEntity->loadExtraColumnsByFilter = false; // page is loaded
 
                         // Return new value to this call

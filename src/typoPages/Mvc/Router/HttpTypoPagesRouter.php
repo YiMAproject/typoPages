@@ -160,10 +160,10 @@ class HttpTypoPagesRouter implements
         $uri  = $request->getUri();
         $path = substr($uri->getPath(), $pathOffset);
 
-        $pageIdentity = $path;
+        $pageUrl = $path;
         if (substr($path, -strlen($this->suffix)) === $this->suffix) {
             // we have a uri that end with suffix
-            $pageIdentity = substr($path, 0, strlen($path)-(strlen($this->suffix)+1/* 1for. */));
+            $pageUrl = substr($path, 0, strlen($path)-(strlen($this->suffix)+1/* 1for. */));
         }
 
         // get page by url ... {
@@ -178,7 +178,7 @@ class HttpTypoPagesRouter implements
             );
         }
 
-        $page = $pagesModel->getPageByUrl($pageIdentity);
+        $page = $pagesModel->getPageByUrl($pageUrl);
         if (!$page) {
             return false;
         }

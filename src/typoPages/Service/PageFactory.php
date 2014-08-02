@@ -56,7 +56,13 @@ class PageFactory implements ServiceLocatorAwareInterface
      */
     public function getPageInstance($name)
     {
-        return $this->getWidgetManager()->get($name);
+        $instance = $this->getWidgetManager()->get($name);
+
+        if (!$instance instanceof PageAbstract) {
+            throw new \Exception('"'.$name.'" is not TypoPages, must instance of PageAbstract.');
+        }
+
+        return $instance;
     }
 
     /**

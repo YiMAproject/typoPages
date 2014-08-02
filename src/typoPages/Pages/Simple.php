@@ -1,14 +1,12 @@
 <?php
 namespace typoPages\Pages;
 
-use yimaWidgetator\Widget\AbstractWidget;
-
 /**
  * Class Simple
  *
  * @package typoPages\Pages
  */
-class Simple extends AbstractWidget
+class Simple extends PageAbstract
 {
     /**
      * @var string Content

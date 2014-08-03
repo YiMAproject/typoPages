@@ -13,6 +13,13 @@ use yimaBase\Db\TableGateway\AbstractTableGateway;
  */
 class PageEntity extends BasePageEntity
 {
+    protected $properties = array(
+        'page_id'     => null, /* Page Identity */
+        'url'         => null, /* Page Url*/
+        'type'        => null, /* Page Type */
+        'parent_page' => null, /* Parent Page */
+    );
+
     /**
      * Injected TableGateway
      *

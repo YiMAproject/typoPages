@@ -2,8 +2,11 @@
 namespace typoPages\Model;
 
 use typoPages\Model\Interfaces\PageInterface;
+use typoPages\Model\TableGateway\PageEntity as GatewayPageEntity;
 use typoPages\Model\TableGateway\PageTable;
 use yimaLocali\LocaleAwareInterface;
+use Zend\ServiceManager\ServiceManager;
+use Zend\ServiceManager\ServiceManagerAwareInterface;
 
 /**
  * Class PageModel
@@ -12,7 +15,8 @@ use yimaLocali\LocaleAwareInterface;
  */
 class PageModel implements
     PageInterface,
-    LocaleAwareInterface
+    LocaleAwareInterface,
+    ServiceManagerAwareInterface
 {
     /**
      * @var string Locale Language
@@ -20,7 +24,7 @@ class PageModel implements
     protected $language;
 
     /**
-     * @var PageTable DataBase Table Gateway
+     * @var GatewayPageEntity Table Gateway
      */
     protected $tableGateway;
 
@@ -37,7 +41,7 @@ class PageModel implements
      *
      * @param $url
      *
-     * @return PageEntity
+     * @return GatewayPageEntity
      */
     public function getPageByUrl($url)
     {
@@ -71,5 +75,15 @@ class PageModel implements
     public function getLocale()
     {
         return $this->language;
+    }
+
+    /**
+     * Set service manager
+     *
+     * @param ServiceManager $serviceManager
+     */
+    public function setServiceManager(ServiceManager $serviceManager)
+    {
+        $this->tableGateway->setServiceManager($serviceManager);
     }
 }

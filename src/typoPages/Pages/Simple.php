@@ -18,6 +18,12 @@ class Simple extends PageAbstract
      */
     protected $style = 'default';
 
+    protected $columns = array(
+        // `column_name` => (bool) is_translatable
+        'content' => true,
+        'style'   => false,
+    );
+
     /**
      * Render widget as string output
      *
